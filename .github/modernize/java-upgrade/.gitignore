@@ -1,0 +1,24 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Build output
+target/
+*.class
+
+# Local uploaded files
+uploads/
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/settings.json
+*.iml
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

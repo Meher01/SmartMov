@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartMov Session</title>
+    <style>
+        :root {
+            color: #f6e4df;
+            background: #3b0b3e;
+            font-family: "Intellecta", "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        body {
+            padding: 18px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #f0a06e 0%, #a34b5b 42%, #3b0b3e 100%);
+        }
+
+        main {
+            width: min(100%, 400px);
+            height: min(100%, 300px);
+            max-width: 400px;
+            max-height: 300px;
+            flex-shrink: 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .label {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #090400;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            max-width: 100%;
+            margin: 0;
+            color: #f6e4df;
+            font-size: 24px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .resource {
+            margin: 5px 0 0;
+            color: #d5afb2;
+            font-size: 22px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .timer {
+            margin: 20px 0 6px;
+            color: #eab8b8;
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 7px;
+            white-space: nowrap;
+            text-shadow: 0 0 10px rgba(234, 184, 184, 0.2);
+        }
+
+        .target {
+            margin: 0;
+            font-size: 18px;
+            color: #090400;
+            font-weight: 700;
+        }
+
+        .status {
+            min-height: 20px;
+            margin: 2px 0 0;
+            color: #090400;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 16px;
+        }
+
+        button {
+            min-width: 0;
+            flex: 1;
+            padding: 7px 4px;
+            border: 1px solid #662249;
+            border-radius: 8px;
+            background: #44174e;
+            color: #f6e4df;
+            cursor: pointer;
+            font: inherit;
+            font-size: 20px;
+            transition: border-color 150ms ease, box-shadow 150ms ease;
+        }
+
+        button:hover {
+            border-color: #ed985a;
+            box-shadow: 0 0 10px rgba(237, 152, 90, 0.16);
+        }
+
+        #finish {
+            border-color: #ed985a;
+            background: #ed985a;
+            color: #181931;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <p class="label">CURRENTLY LEARNING</p>
+        <h1 id="goal" style="text-transform: uppercase;">Learning session</h1>
+        <p id="resource" class="resource">Free study session</p>
+        <div id="timer" class="timer">00:00:00</div>
+        <p id="target" class="target">Target: 10 minutes</p>
+        <p id="status" class="status"></p>
+        <div class="actions">
+            <button id="pause" type="button">Pause</button>
+            <button id="finish" type="button">Finish Session</button>
+        </div>
+    </main>
+
+    <script>
+        const channel = new BroadcastChannel("smartmov-session");
+        const goal = document.getElementById("goal");
+        const resource = document.getElementById("resource");
+        const timer = document.getElementById("timer");
+        const target = document.getElementById("target");
+        const status = document.getElementById("status");
+        const pause = document.getElementById("pause");
+
+        function formatTime(totalSeconds) {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            return [hours, minutes, seconds]
+                .map(value => String(value).padStart(2, "0"))
+                .join(":");
+        }
+
+        channel.addEventListener("message", event => {
+            const message = event.data || {};
+            if (message.type !== "state") return;
+
+            goal.textContent = message.goalTitle || "Learning session";
+            resource.textContent = message.resourceTitle || "Free study session";
+            timer.textContent = formatTime(message.elapsedSeconds || 0);
+            target.textContent = `Target: ${message.dailyMinutes || 10} minutes`;
+            status.textContent = message.timerPaused ? "Paused session" : "";
+            pause.textContent = message.timerPaused ? "Resume" : "Pause";
+        });
+
+        pause.addEventListener("click", () => {
+            channel.postMessage({ type: "togglePause" });
+        });
+
+        document.getElementById("finish").addEventListener("click", () => {
+            channel.postMessage({ type: "finish" });
+        });
+
+        let closeNotified = false;
+
+        function closeSession() {
+            if (closeNotified) return;
+
+            closeNotified = true;
+            channel.postMessage({ type: "close" });
+        }
+
+        window.addEventListener("pagehide", closeSession);
+        window.addEventListener("beforeunload", closeSession);
+        channel.postMessage({ type: "ready" });
+    </script>
+</body>
+</html>

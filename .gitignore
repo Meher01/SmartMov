@@ -1,0 +1,25 @@
+# Secrets
+.env
+**/.env
+*.pem
+
+# Java / Maven
+**/target/
+**/.mvn/timing.properties
+
+# Application uploads
+uploads/
+**/uploads/
+
+# Deployment artifacts
+*.zip
+*.jar
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartMov</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <h1>
+            <a class="brand-link" href="about.html" aria-label="About SmartMov">
+                <span class="logo">✓</span>SmartMov
+            </a>
+        </h1>
+
+        <div class="navbar-actions">
+            <button id="accountBtn" class="account-btn">
+                Log in / Sign up
+            </button>
+
+            <button id="createGoalBtn">
+                + Create Target
+            </button>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <!-- Statistics -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <span>🔥</span>
+                <h2 id="streak">0</h2>
+                <p>Day Streak</p>
+            </div>
+
+            <div class="stat-card">
+                <span>⭐</span>
+                <h2 id="xp">0</h2>
+                <p>XP</p>
+            </div>
+
+            <div class="stat-card">
+                <span>📚</span>
+                <h2 id="level">1</h2>
+                <p>Level</p>
+            </div>
+
+        </section>
+
+
+        <!-- Today's Goals -->
+
+        <section class="goals-section">
+
+            <h2>Reach Your Target :</h2>
+
+            <div id="emptyGoalsMessage" class="empty-goals-message" aria-live="polite">
+                <p id="emptyGoalsQuote"></p>
+            </div>
+
+            <div id="goalsContainer">
+
+            <!--goals -->
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Account Modal -->
+
+    <div id="accountModal" class="modal hidden">
+
+        <div class="modal-content account-modal-content">
+
+            <button id="closeAccountModalBtn" class="close-btn">
+                X
+            </button>
+
+            <h2 id="accountModalTitle">Log in to SmartMov</h2>
+
+            <p id="accountStatus" class="account-status" role="alert"></p>
+
+            <form id="accountForm">
+
+
+                <label for="accountUsername">Username</label>
+
+<input
+    type="text"
+    id="accountUsername"
+    placeholder="Enter your username"
+    required
+>
+
+                <div id="accountEmailContainer" class="hidden">
+                    <label for="accountEmail">Email</label>
+
+                    <input
+                        type="email"
+                        id="accountEmail"
+                        placeholder="you@example.com"
+                        autocomplete="email"
+                    >
+                </div>
+
+                <label for="accountPassword">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="accountPassword"
+                    placeholder="At least 6 characters"
+                    minlength="6"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button type="submit" id="accountSubmitBtn" class="primary-btn">
+                    Log in
+                </button>
+
+            </form>
+
+            <button type="button" id="accountModeBtn" class="account-mode-btn">
+                Need an account? Sign up
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Create Goal Modal -->
+
+    <div id="goalModal" class="modal hidden">
+
+        <div class="modal-content">
+
+            <button id="closeModalBtn" class="close-btn">
+                X
+            </button>
+
+            <h2>Create Learning Target</h2>
+
+            <form id="goalForm">
+
+                <label>
+                    Name your Target:
+                </label>
+
+                <input
+                    type="text"
+                    id="goalTitle"
+                    placeholder="e.g. Learn Java Collections"
+                    required
+                >
+
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    id="goalDescription"
+                    placeholder="What do you want to learn?"
+                ></textarea>
+
+
+                <label>
+                    Category
+                </label>
+
+                <input
+                    type="text"
+                    id="goalCategory"
+                    placeholder="e.g. Java"
+                >
+
+
+                <label for="goalMinutes">
+                    Daily target (minimum: 10 mins)
+                </label>
+
+                <input
+                    type="text"
+                    id="goalMinutes"
+                    value="10"
+                    min="10"
+                    required
+                >
+                <button type="submit" class="primary-btn">
+                    Create Target
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+<div id="resourceModal" class="modal hidden">
+
+    <div class="modal-content">
+
+        <button
+            id="closeResourceModalBtn"
+            class="close-btn"
+        >
+            X
+        </button>
+
+        <h2 id="resourceModalTitle">
+            Add Resource
+        </h2>
+
+        <div id="currentResources" class="current-resources"></div>
+
+        <form id="resourceForm">
+
+            <label>
+                Resource title
+            </label>
+
+            <input
+                type="text"
+                id="resourceTitle"
+                placeholder="e.g. Java Collections Tutorial"
+                required
+            >
+
+            <label for="resourceType">Resource type</label>
+            <select id="resourceType" required>
+                <option value="YOUTUBE">YouTube video</option>
+                <option value="WEBSITE">Website</option>
+                <option value="FILE">PDF or document</option>
+            </select>
+
+            <div id="resourceUrlContainer">
+
+                <label>
+                    URL
+                </label>
+
+                <input
+                    type="url"
+                    id="resourceUrl"
+                    placeholder="https://..."
+                >
+
+            </div>
+
+<div
+    id="resourceFileContainer"
+    class="hidden"
+>
+
+    <label for="resourceFile">
+        Choose file
+    </label>
+
+    <input
+        type="file"
+        id="resourceFile"
+        accept=".pdf,.doc,.docx"
+    >
+
+    <p class="file-help">
+        PDF, DOC or DOCX files only.
+    </p>
+
+</div>
+
+            <div id="resourceNoteContainer" class="hidden">
+
+                <label>
+                    Your note
+                </label>
+
+                <textarea
+                    id="resourceNote"
+                    placeholder="What do you want to remember?"
+                ></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="resourceSubmitBtn"
+                class="primary-btn"
+            >
+                Add Resource
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div
+    id="learningModal"
+    class="modal session-overlay hidden"
+>
+
+    <div class="learning-modal-content">
+
+        <button
+            id="closeLearningModalBtn"
+            class="close-btn"
+        >
+            X
+        </button>
+
+        <div id="learningDragHandle" class="learning-drag-handle">
+            <p class="learning-label">
+                CURRENTLY LEARNING
+            </p>
+
+            <h2 id="learningGoalTitle">
+                Goal <span id="sessionStatus" class="session-status" aria-live="polite"></span>
+            </h2>
+        </div>
+
+        <div id="learningSessionBody">
+
+
+            <div
+                id="learningResourceTitle"
+                class="learning-resource"
+            >
+                No resource selected
+            </div>
+
+
+            <div
+                id="timerDisplay"
+                class="timer-display"
+            >
+                00:00:00
+            </div>
+
+
+            <p id="timerTarget">
+                Target: 10 minutes
+            </p>
+
+
+            <div class="timer-actions">
+
+                <button
+                    id="pauseTimerBtn"
+                    class="secondary-btn"
+                >
+                    ⏸ Pause
+                </button>
+
+
+                <button
+                    id="finishTimerBtn"
+                    class="primary-btn"
+                >
+                    ✓ Finish Session
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
