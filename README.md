@@ -7,7 +7,7 @@ Users can create learning targets, track daily progress, manage learning resourc
 ## 🚀 Live Application
 
 **Production:**
-https://production.dk7woe83s41km.amplifyapp.com/
+PS: AWS Deployment is removed since the hackathon is over.
 
 The production application is publicly accessible over HTTPS.
 
