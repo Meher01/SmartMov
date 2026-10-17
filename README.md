@@ -1,4 +1,4 @@
-# SmartMov
+# SmartMov - [AWS Zero - to - Shipped]
 
 **SmartMov** is a learning and productivity platform that helps users turn learning goals into structured daily progress.
 
