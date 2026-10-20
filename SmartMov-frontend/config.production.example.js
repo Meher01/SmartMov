@@ -1,3 +1,4 @@
 window.SMARTMOV_CONFIG = {
-    apiBaseUrl: "https://api.example.com/api"
+    // Set this to the URL of the separately hosted Spring Boot backend.
+    apiBaseUrl: "https://your-backend.example.com/api"
 };
